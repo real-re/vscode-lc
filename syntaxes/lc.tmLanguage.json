@@ -1,0 +1,370 @@
+{
+    "version": "v0.1.0",
+    "scopeName": "source.lc",
+    "patterns": [
+        {
+            "include": "#comment"
+        },
+        {
+            "include": "#table"
+        },
+        {
+            "include": "#key_value"
+        }
+    ],
+    "repository": {
+        "comment": {
+            "patterns": [
+                {
+                    "match": "\\s*((#)\\s*(region|endregion)\\s+(.*))$",
+                    "comment": "Comments",
+                    "captures": {
+                        "1": {
+                            "name": "comment.line.number-sign.lc"
+                        },
+                        "2": {
+                            "name": "punctuation.definition.comment.lc"
+                        },
+                        "4": {
+                            "name": "string.lc"
+                        }
+                    }
+                },
+                {
+                    "match": "\\s*((#).*)$",
+                    "comment": "Comments",
+                    "captures": {
+                        "1": {
+                            "name": "comment.line.number-sign.lc"
+                        }
+                    }
+                }
+            ]
+        },
+        "table": {
+            "patterns": [
+                {
+                    "name": "meta.tag.table.lc",
+                    "match": "^\\s*(\\[)([^\\[\\]]*)(\\])",
+                    "captures": {
+                        "1": {
+                            "name": "punctuation.definition.table.lc"
+                        },
+                        "2": {
+                            "patterns": [
+                                {
+                                    "match": "[^\\s.]+",
+                                    "name": "entity.other.attribute-name.table.lc"
+                                }
+                            ]
+                        },
+                        "3": {
+                            "name": "punctuation.definition.table.lc"
+                        }
+                    }
+                },
+                {
+                    "begin": "(?<!\\w)(\\{)\\s*",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "punctuation.definition.table.inline.lc"
+                        }
+                    },
+                    "end": "\\s*(\\})(\\s*(\\w+)\\s*(\\d+)\\s*)?(?!\\w)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.definition.table.inline.lc"
+                        },
+                        "3": {
+                            "name": "entity.name.tag.operator.lc"
+                        },
+                        "4": {
+                            "name": "constant.numeric.integer.lc"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#key_value"
+                        },
+                        {
+                            "include": "#data"
+                        }
+                    ]
+                }
+            ]
+        },
+        "key_value": {
+            "patterns": [
+                {
+                    "name": "invalid.illegal.noKey.lc",
+                    "match": "(\\s*=.*)$"
+                },
+                {
+                    "name": "invalid.deprecated.noValue.lc",
+                    "match": "(\\s*[A-Za-z_\\-][A-Za-z0-9_\\-]*\\s*=)(?=\\s*$)"
+                },
+                {
+                    "begin": "\\s*(@?)([A-Za-z_-][A-Za-z0-9_-]*|\".+\"|'.+'|[0-9]+)\\s*(=)\\s*",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "entity.other.attribute-name.internal.key.lc"
+                        },
+                        "2": {
+                            "name": "entity.name.tag.lc"
+                        },
+                        "3": {
+                            "name": "punctuation.definition.keyValue.lc"
+                        }
+                    },
+                    "end": "($|(?==)|\\n|\\s*(?=\\}))",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#key_value"
+                        },
+                        {
+                            "include": "#data"
+                        },
+                        {
+                            "include": "#illegal"
+                        }
+                    ]
+                }
+            ]
+        },
+        "data": {
+            "patterns": [
+                {
+                    "begin": "(?<!\\w)(\\{)\\s*",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "punctuation.definition.table.inline.lc"
+                        }
+                    },
+                    "end": "\\s*(\\})(?!\\w)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.definition.table.inline.lc"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#key_value"
+                        },
+                        {
+                            "include": "#data"
+                        }
+                    ]
+                },
+                {
+                    "begin": "(?<!\\w)(\\[)\\s*",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "punctuation.definition.array.lc"
+                        }
+                    },
+                    "end": "\\s*(\\])(?!\\w)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.definition.array.lc"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#key_value"
+                        },
+                        {
+                            "include": "#data"
+                        }
+                    ]
+                },
+                {
+                    "name": "string.quoted.triple.basic.block.lc",
+                    "begin": "\"\"\"",
+                    "end": "\"\"\"",
+                    "patterns": [
+                        {
+                            "match": "\\\\([btnfr\"\\\\\\n/ ]|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})",
+                            "name": "constant.character.escape.lc"
+                        },
+                        {
+                            "match": "\\\\[^btnfr/\"\\\\\\n]",
+                            "name": "invalid.illegal.escape.lc"
+                        }
+                    ]
+                },
+                {
+                    "name": "string.quoted.single.basic.line.lc",
+                    "match": "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"",
+                    "patterns": [
+                        {
+                            "match": "\\\\([btnfr\"\\\\\\n/ ]|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})",
+                            "name": "constant.character.escape.lc"
+                        },
+                        {
+                            "match": "\\\\[^btnfr/\"\\\\\\n]",
+                            "name": "invalid.illegal.escape.lc"
+                        }
+                    ]
+                },
+                {
+                    "name": "string.quoted.triple.literal.block.lc",
+                    "begin": "'''",
+                    "end": "'''"
+                },
+                {
+                    "name": "string.quoted.single.literal.line.lc",
+                    "match": "'.*?'"
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "constant.other.datetime.offset.lc"
+                        }
+                    },
+                    "match": "(?<!\\w)(\\d{4}\\-\\d{2}\\-\\d{2}[T| ]\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[\\+\\-]\\d{2}:\\d{2}))(?!\\w)"
+                },
+                {
+                    "captures": {
+                        "1": {
+                            "name": "constant.other.datetime.local.lc"
+                        }
+                    },
+                    "match": "(\\d{4}\\-\\d{2}\\-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?)"
+                },
+                {
+                    "name": "constant.other.date.lc",
+                    "match": "\\d{4}\\-\\d{2}\\-\\d{2}"
+                },
+                {
+                    "name": "constant.other.time.lc",
+                    "match": "\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?"
+                },
+                {
+                    "match": "(?<!\\w)(true|false)(?!\\w)",
+                    "captures": {
+                        "1": {
+                            "name": "constant.other.boolean.lc"
+                        }
+                    }
+                },
+                {
+                    "match": "(?<!\\w)((?:[\\+\\-]?(([0-9](([0-9]|_[0-9])+)?))))\\s*(\\.\\.)\\s*((?:[\\+\\-]?(([0-9](([0-9]|_[0-9])+)?))))(?!\\w)",
+                    "captures": {
+                        "1": {
+                            "name": "constant.numeric.integer.lc"
+                        },
+                        "6": {
+                            "name": "constant.other.range.lc"
+                        },
+                        "7": {
+                            "name": "constant.numeric.integer.lc"
+                        }
+                    }
+                },
+                {
+                    "match": "(?<!\\w)([\\+\\-]?(0|([1-9](([0-9]|_[0-9])+)?))(?:(?:\\.(0|([1-9](([0-9]|_[0-9])+)?)))?[eE][\\+\\-]?[1-9]_?[0-9]*|(?:\\.[0-9_]*)))(?!\\w)",
+                    "captures": {
+                        "1": {
+                            "name": "constant.numeric.float.lc"
+                        }
+                    }
+                },
+                {
+                    "match": "(?<!\\w)((?:[\\+\\-]?(0|([1-9](([0-9]|_[0-9])+)?))))(?!\\w)",
+                    "captures": {
+                        "1": {
+                            "name": "constant.numeric.integer.lc"
+                        }
+                    }
+                },
+                {
+                    "match": "(?<!\\w)([\\+\\-]?inf)(?!\\w)",
+                    "captures": {
+                        "1": {
+                            "name": "constant.numeric.inf.lc"
+                        }
+                    }
+                },
+                {
+                    "match": "(?<!\\w)([\\+\\-]?nan)(?!\\w)",
+                    "captures": {
+                        "1": {
+                            "name": "constant.numeric.nan.lc"
+                        }
+                    }
+                },
+                {
+                    "match": "(?<!\\w)((?:0x(([0-9a-fA-F](([0-9a-fA-F]|_[0-9a-fA-F])+)?))))(?!\\w)",
+                    "captures": {
+                        "1": {
+                            "name": "constant.numeric.hex.lc"
+                        }
+                    }
+                },
+                {
+                    "match": "(?<!\\w)(0o[0-7](_?[0-7])*)(?!\\w)",
+                    "captures": {
+                        "1": {
+                            "name": "constant.numeric.oct.lc"
+                        }
+                    }
+                },
+                {
+                    "match": "(?<!\\w)(0b[01](_?[01])*)(?!\\w)",
+                    "captures": {
+                        "1": {
+                            "name": "constant.numeric.bin.lc"
+                        }
+                    }
+                },
+                {
+                    "begin": "\\s*(\\S+)(\\{)\\s*",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "string"
+                        },
+                        "2": {
+                            "name": "constant.other.boolean.lc"
+                        }
+                    },
+                    "end": "\\s*(\\})(\\S+)?\\s*",
+                    "endCaptures": {
+                        "1": {
+                            "name": "constant.other.boolean.lc"
+                        },
+                        "2": {
+                            "name": "string"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#data"
+                        }
+                    ]
+                },
+                {
+                    "match": "\\s*(\\S+)\\s*",
+                    "captures": {
+                        "1": {
+                            "name": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "illegal": {
+            "captures": {
+                "1": {
+                    "name": "invalid.illegal.lc"
+                }
+            },
+            "match": "(.*)"
+        }
+    }
+}

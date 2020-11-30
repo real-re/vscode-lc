@@ -1,0 +1,46 @@
+{
+    "name": "lc",
+    "displayName": "LC",
+    "description": "LC support for vscode.",
+    "version": "0.0.1",
+    "license": "MIT",
+    "author": {
+        "name": "re",
+        "url": "https://github.com/real-re"
+    },
+    "publisher": "Rebuild",
+    "enableProposedApi": false,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/real-re/vscode-lc"
+    },
+    "engines": {
+        "vscode": "*"
+    },
+    "categories": [
+        "Programming Languages",
+        "Formatters"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "lc",
+                "aliases": [
+                    "LC",
+                    "lc"
+                ],
+                "extensions": [
+                    ".lc"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "lc",
+                "scopeName": "source.lc",
+                "path": "./syntaxes/lc.tmLanguage.json"
+            }
+        ]
+    }
+}
