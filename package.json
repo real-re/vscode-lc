@@ -2,6 +2,7 @@
     "name": "lc",
     "displayName": "LC",
     "description": "LC support for vscode.",
+    "icon": "icon.png",
     "version": "0.0.1",
     "license": "MIT",
     "author": {
