@@ -33,14 +33,14 @@
                 "extensions": [
                     ".lc"
                 ],
-                "configuration": "./language-configuration.json"
+                "configuration": "./extension/lc.configuration.json"
             }
         ],
         "grammars": [
             {
                 "language": "lc",
                 "scopeName": "source.lc",
-                "path": "./syntaxes/lc.tmLanguage.json"
+                "path": "./extension/lc.tmLanguage.json"
             }
         ]
     }
